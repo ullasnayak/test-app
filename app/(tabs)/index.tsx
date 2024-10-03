@@ -1,76 +1,75 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import Carousel from "react-native-snap-carousel-rnna";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+const movieData = [
+  {
+    Poster: require("../../assets/images/Batman Begins.jpg"),
+    Title: "Batman Begins",
+  },
+  {
+    Poster: require("../../assets/images/The Dark Knight.jpg"),
+    Title: "The Dark Knight",
+  },
+  {
+    Poster: require("../../assets/images/The Dark Knight Rises.webp"),
+    Title: "The Dark Knight Rises",
+  },
+  {
+    Poster: require("../../assets/images/Batman vs. Superman.jpg"),
+    Title: "Batman vs. Superman",
+  },
+];
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
+const { width } = Dimensions.get("window");
+
+const App = () => {
+  const movies = movieData;
+
+  const renderMovie = ({ item }: { item: any }) => {
+    return (
+      <View className="items-center">
         <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
+          source={item.Poster}
+          style={{ width: width * 0.8, height: 400 }}
+          resizeMode="cover"
         />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" className="text-3xs">
-          Welcome!
-        </ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
+        <Text className="text-white text-lg mt-2">{item.Title}</Text>
+      </View>
+    );
+  };
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});
+  return (
+    <View className="flex-1 bg-neutral-800">
+      <View className="flex-row items-center justify-between px-4 py-3 mt-10">
+        <TouchableOpacity>
+          <Ionicons name="menu" size={24} color="white" />
+        </TouchableOpacity>
+        <View className="flex-row items-center">
+          <Text className="text-yellow-500 text-2xl font-bold">M</Text>
+          <Text className="text-white text-2xl font-bold">ovies</Text>
+        </View>
+        <TouchableOpacity>
+          <Ionicons name="search" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <View className="flex-1 justify-center items-center mt-10">
+        {movies.length > 0 ? (
+          <Carousel
+            data={movies}
+            renderItem={renderMovie}
+            sliderWidth={width}
+            itemWidth={width * 0.8}
+            loop={true}
+          />
+        ) : (
+          <Text className="text-white">No movies found</Text>
+        )}
+      </View>
+    </View>
+  );
+};
+
+export default App;
