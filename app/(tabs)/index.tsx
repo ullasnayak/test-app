@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Carousel from "react-native-snap-carousel-rnna";
+import Sidebar from "@/components/sideBar/Sidebar";
 
 const movieData = [
   {
@@ -25,6 +26,7 @@ const movieData = [
 const { width } = Dimensions.get("window");
 
 const App = () => {
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
   const movies = movieData;
 
   const renderMovie = ({ item }: { item: any }) => {
@@ -39,13 +41,16 @@ const App = () => {
       </View>
     );
   };
-
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible); // Toggle the sidebar visibility
+  };
   return (
     <View className="flex-1 bg-neutral-800">
       <View className="flex-row items-center justify-between px-4 py-3 mt-10">
-        <TouchableOpacity>
-          <Ionicons name="menu" size={24} color="white" />
+        <TouchableOpacity onPress={toggleSidebar} style={{ zIndex: -1 }}>
+          <Ionicons name="menu" size={24} color="black" />
         </TouchableOpacity>
+
         <View className="flex-row items-center">
           <Text className="text-yellow-500 text-2xl font-bold">M</Text>
           <Text className="text-white text-2xl font-bold">ovies</Text>
@@ -68,6 +73,8 @@ const App = () => {
           <Text className="text-white">No movies found</Text>
         )}
       </View>
+
+      <Sidebar isVisible={isSidebarVisible} onClose={toggleSidebar} />
     </View>
   );
 };
